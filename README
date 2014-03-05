@@ -1,1 +1,10 @@
 Chat attempt.
+
+compile connect.c as follows - (assuming ubuntu or equiv.)
+gcc -o ipaddress connect.c
+
+to run
+./ipaddress www.example.com
+or whatever.
+
+
