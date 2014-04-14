@@ -7,4 +7,6 @@ to run
 ./ipaddress www.example.com
 or whatever.
 
-
+START SCREEN
+to compile run the following
+gcc -o startwlog startscreen.c -lncurses 
