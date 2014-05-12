@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////
-//ONE WAY CHAT PROGRAMME WITH JUMBLED UP CLIENTS AND SERVERS//
-//////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+//Lonely chat program, one client one server, messages echo back to client//
+////////////////////////////////////////////////////////////////////////////
 
 ##############
  TO "INSTALL"
@@ -9,8 +9,8 @@
 Download files.
 cd into src dir.
 Change ADDR macro in rivertalk.c to appropriate IP address.
-If local IP address this can be found using ifconfig or else I think NULL works.
-Then compile it all using make.
+If local IP address, this can be found using ifconfig or else I think NULL works.
+Then compile it all using make all.
 
 
 ##########
@@ -20,12 +20,12 @@ Then compile it all using make.
 cd into bin directory
 Run rivertalkd somewhere
 run rivertalk somewhere else
-Type away in rivertalkd
+Type away in rivertalk
 See it arrive in rivertalk
 
-############
+#############
   TO "NOTE"
-############
+#############
 
 Keep your messages under 140 characters. It's only able to send 140 characters at a time right now.
 Don't know if security is important for these kinds of things, just bear in mind that it hasn't been thought about.
