@@ -11,6 +11,7 @@
 
 #define PORT "4991"
 #define MAXDATASIZE 140
+#define ADDR NULL
 
 void *get_in_addr(struct sockaddr *sa)
 {
@@ -29,7 +30,7 @@ void clrbuf(char* buffer){
 
 int main(int argc, char *argv[]){
   struct addrinfo hints, *servinfo, *p;
-  int sockfd, numbytes;
+  int sockfd, numbytes, childproc;
   char *buffer = (char*) malloc(MAXDATASIZE*sizeof(char));
   char s[INET6_ADDRSTRLEN];
 
@@ -68,16 +69,25 @@ inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr), s, sizeof s)
 loginfo(wlogfp, "INFO", "connecting to server at", s);
   freeaddrinfo(servinfo);
 
-  //if ((numbytes = recv(sockfd, buffer, MAXDATASIZE-1, 0)) == -1) {
-    //loginfo(wlogfp, "ERROR","receiving didn't work", NULL);
-     //exit(1);
-  //}
+childproc = fork();
+if(childproc>=0){
+if(childproc >0){
+
    while((numbytes = recv(sockfd, buffer, MAXDATASIZE-1, 0)) >0) {
       buffer[numbytes]='\0';
       loginfo(wlogfp, "INFO", "Received message:", buffer);
       printf("%s", buffer);
       clrbuf(buffer);
     }
+} else {
+      //SENDING MESSAGES
+            while((fgets(buffer,140*sizeof(char),stdin ))!=NULL){
+               if (send(sockfd, buffer, 140, 0) == -1)
+                 loginfo(wlogfp, "ERROR", "didnt send the message. :(", NULL);
+           clrbuf(buffer);
+ 		}
+}
+}
   close(sockfd);
 fclose(wlogfp);
   free(buffer);
