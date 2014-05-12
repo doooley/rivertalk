@@ -48,8 +48,6 @@ int socksetup () {
 return sock;
 }
 
-
-
 int main(){
   int sockfd, numbytes, childproc;
   char *buffer = (char*) malloc(MAXDATASIZE*sizeof(char));

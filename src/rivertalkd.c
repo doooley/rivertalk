@@ -54,11 +54,9 @@ void clrbuf(char* buffer){
 
 void updateclients(fd_set *active_set, char* buffer, int sock){
   int i;
-  printf("Sending message back to clients\n\t%s", buffer);
   for (i=0;i<FD_SETSIZE; i++)
     if(FD_ISSET(i, active_set) && i != sock){
       if(-1 == send(i, buffer, 140, 0)){
-	printf("closing %d\n", i);
         close(i);
         FD_CLR(i, active_set);
       }
@@ -74,7 +72,6 @@ int getmsg (int fd, char *buffer) {
   else if(0 == numbytes)
     return -1;
   else{
-    printf("recv: %s\n", buffer);
     return 0;
     }
 }
@@ -101,7 +98,6 @@ int main(){
     for(i=0;i<FD_SETSIZE;i++){
       if(FD_ISSET(i, &read_set)){
         if(i==sock){
-	    printf("new connection! %d\n", i);
           int new_fd;
 	  size=sizeof(their_addr); 
 	  new_fd=accept(sock, (struct sockaddr *)&their_addr, &size);

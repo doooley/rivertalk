@@ -1,21 +1,16 @@
-IDIR = ../include
 CC = gcc
-CFLAGS = -I$(IDIR)
-
-_DEPS = wlog.h
-DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 ODIR = obj
 
 BINDIR = ../bin
 
-_CLIENTOBJ = wlog.o rivertalk.o
+_CLIENTOBJ = rivertalk.o
 CLIENTOBJ = $(patsubst %,$(ODIR)/%,$(_CLIENTOBJ))
 
-_SERVEROBJ = wlog.o rivertalkd.o
+_SERVEROBJ = rivertalkd.o
 SERVEROBJ = $(patsubst %,$(ODIR)/%,$(_SERVEROBJ))
 
-_ALLOBJ = wlog.o rivertalkd.o rivertalk.o
+_ALLOBJ =  rivertalkd.o rivertalk.o
 ALLOBJ = $(patsubst %,$(ODIR)/%,$(_ALLOBJ))
 
 _EXECUTABLES = rivertalk rivertalkd
