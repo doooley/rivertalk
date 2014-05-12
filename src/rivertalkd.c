@@ -11,6 +11,7 @@
 #include <signal.h>
 #include "wlog.h"
 
+#define MAXDATASIZE 140
 #define PORT "4991"
 #define BACKLOG 10
 
@@ -36,7 +37,7 @@ void *get_in_addr(struct sockaddr *sa)
 int main(){
   struct sockaddr_storage their_addr;
   struct addrinfo hints, *servinfo, *p;
-  int sockfd, yes=1, addr_size, new_fd;
+  int sockfd, yes=1, addr_size, new_fd, numbytes;
   char s[INET6_ADDRSTRLEN], *buffer;
     buffer= malloc(140*sizeof(char));
 
@@ -105,11 +106,15 @@ loginfo(wlogfp, "INFO","waitin on connections....", NULL);
         loginfo(wlogfp, "INFO", "closing the connection..", NULL);
         close(sockfd);
 
-	while((fgets(buffer,140*sizeof(char),stdin ))!=NULL){
+           //RECEIVING MESSAGES
+   while((numbytes = recv(new_fd, buffer, MAXDATASIZE-1, 0)) >0) {
+      buffer[numbytes]='\0';
+      loginfo(wlogfp, "INFO", "Received message:", buffer);
+
           if (send(new_fd, buffer, 140, 0) == -1)
             loginfo(wlogfp, "ERROR", "didnt send the message. :(", NULL);
       clrbuf(buffer);
-	}
+}
 
         close(new_fd);
         exit(0);
