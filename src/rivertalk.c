@@ -17,7 +17,7 @@
 void clrbuf(char* buffer){
   int i;
   for(i=0;i<strlen(buffer);i++)
-  buffer[i]='\0';
+  buffer[i]=' ';
 }
 
 int socksetup () {
@@ -48,27 +48,72 @@ int socksetup () {
 return sock;
 }
 
+void startscreen(){
+  int row, col, my, mx;
+  char msg[]="rivertalk.";
+
+  initscr();
+  raw();
+  noecho();
+
+  getmaxyx(stdscr,row,col);
+  my=(int)row*0.5;
+  mx=(int)(col - 5)*0.5;
+
+  attron(A_BOLD);
+  mvprintw(my, mx, msg);
+  attroff(A_BOLD);
+  refresh();
+
+  getch();
+  clear();
+  refresh();
+  endwin();
+}
+
 int main(){
   int sockfd, numbytes, childproc;
+  int y, x;
   char *buffer = (char*) malloc(MAXDATASIZE*sizeof(char));
   sockfd=socksetup();
+
+    startscreen();
+	//  SETTING UP ncurses WINDOWS
+        WINDOW *in, *out;
+        initscr();
+        cbreak();
+	echo();
+        in = newwin(4, 0, LINES-4, 0);
+          box(in, 0, 0);
+        out = newwin(10, 0, 0, 0);
+	scrollok(in, TRUE);
+	scrollok(out, TRUE);
+
 
   childproc = fork();
 
   if(childproc >= 0){
     if(childproc > 0){	 //RECEIVING MESSAGES
       while((numbytes = recv(sockfd, buffer, MAXDATASIZE-1, 0)) >0) {
-        buffer[numbytes]='\0';
-        printf("%s", buffer);
-        clrbuf(buffer);
+            wprintw(out, "%s", buffer);
+	    wrefresh(out);
+	    wrefresh(in);
+	    wmove(in, 1, 1);
         }
       } else	 	//SENDING MESSAGES
-       while((fgets(buffer,140*sizeof(char),stdin ))!=NULL){
+    while(1){
+        mvwgetstr(in,1, 1, buffer);
+	wmove(in, 1, 1);
+        wclrtoeol(in);
          if (send(sockfd, buffer, 140, 0) == -1)
 		close(sockfd);
-         clrbuf(buffer);
          }
   }
+
+wgetch(in);
+delwin(in);
+delwin(out);
+endwin();
 
   close(sockfd);
   free(buffer);

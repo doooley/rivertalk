@@ -1,4 +1,5 @@
 CC = gcc
+CFLAGS = -lncurses
 
 ODIR = obj
 
@@ -26,9 +27,6 @@ $(BINDIR)/rivertalkd: $(SERVEROBJ)
 
 
 $(ODIR)/rivertalk.o: rivertalk.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
-
-$(ODIR)/wlog.o: wlog.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR)/rivertalkd.o: rivertalkd.c $(DEPS)
