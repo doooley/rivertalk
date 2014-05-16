@@ -8,7 +8,6 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <ncurses.h>
-//#include "wlog.h"
 
 #define PORT "4991"
 #define MAXDATASIZE 140
@@ -95,7 +94,8 @@ int main(){
   if(childproc >= 0){
     if(childproc > 0){	 //RECEIVING MESSAGES
       while((numbytes = recv(sockfd, buffer, MAXDATASIZE-1, 0)) >0) {
-            wprintw(out, "%s", buffer);
+		if(0 < strlen(buffer))
+            wprintw(out, "%s\n", buffer);
 	    wrefresh(out);
 	    wrefresh(in);
 	    wmove(in, 1, 1);
