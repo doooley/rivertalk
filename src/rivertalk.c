@@ -11,7 +11,6 @@
 
 #define PORT "4991"
 #define MAXDATASIZE 140
-#define ADDR NULL
 
 void clrbuf(char* buffer){
   int i;
@@ -19,7 +18,7 @@ void clrbuf(char* buffer){
   buffer[i]=' ';
 }
 
-int socksetup () {
+int socksetup (char *addr) {
   int sock, yes=1;
   struct addrinfo hints, *servinfo, *p;
 
@@ -27,7 +26,7 @@ int socksetup () {
           memset (&hints, 0, sizeof(hints));
           hints.ai_family=AF_UNSPEC;
           hints.ai_socktype=SOCK_STREAM;
-          if(0 != getaddrinfo(NULL, PORT, &hints, &servinfo))
+          if(0 != getaddrinfo(addr, PORT, &hints, &servinfo))
             exit(1);
 
     for(p=servinfo; p!=NULL; p=p->ai_next) {
@@ -70,13 +69,17 @@ void startscreen(){
   endwin();
 }
 
-int main(){
+int main(int argc, char *argv[]){
   int sockfd, numbytes, childproc;
   int y, x;
   char *buffer = (char*) malloc(MAXDATASIZE*sizeof(char));
-  sockfd=socksetup();
+  char *addr = NULL;
+    if(argc >= 2){
+      addr=argv[1];
+	}
+  sockfd=socksetup(addr);
 
-    startscreen();
+    startscreen(addr);
 	//  SETTING UP ncurses WINDOWS
         WINDOW *in, *out;
         initscr();
